@@ -1,0 +1,57 @@
+Crypto Dashboard
+
+High Level Description
+- Displays real time crypto prices over time
+- Sentiment analysis service that scrapes the web for tweets and articles to 
+determine the sentiment of this coin.
+	- Gives AI powered insights on which coins are good investments
+
+
+Components
+- crypto-service: serves real-time coin price data; has to manage multiple clients (users), each client has a websocket connection for streaming real-time data.
+	- Apache Kafka?: Message Queue used for scalable streaming; overkill but cool to learn
+		- segmentio/kafka-go
+	- Websocket: more primative but sufficient
+- insight-service: AI insights on whether or not a coin is a good investment
+	- use 3rd party AI service
+		- InciteAI
+		- Token Metrics AI Chatbot
+		- Maybe train a BigQuery Model
+- sentiment-service: Processes scraped tweets and articles to compute sentiment scores
+	- Use VADER (nltk)
+	- Pull data from cloud storage bucket
+	- computes sentiment
+	- 
+- data-ingestion: Triggered daily scraping jobs
+	- uses news api and tweepy for gathering data
+	- stores in cloud storage buckets
+
+
+
+How will this be hosted? (GCP)
+*Store API keys in Secret Manager
+
+
+- crypto-service:
+	- Language: Go
+	- Deploy: Cloud Run
+	- 
+
+- insight-service:
+	- Language: Go
+	- Deploy: Cloud Run
+	- Storage: Pulls data from Cloud Storage Buckets
+
+- sentiment-service:
+	- Language: Python
+	- Deploy: Cloud Run
+	- Storage: Store sentiment in Firestore
+	- API endpoint with FastAPI
+
+- data-ingestion: Cloud Scheduler
+	- Language: Python
+	- triggers daily at same time
+	- Deploy: Cloud Functions -> python functions to pull/scrape data
+		- NewsAPI
+		- X API: tweepy -> fetch tweets
+	- Storage: Stores data in Cloud Storage Buckets
