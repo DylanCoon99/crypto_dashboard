@@ -26,7 +26,7 @@ def read_folder_from_bucket(folder_name):
 		contents = json.loads(blob.download_as_bytes())
 
 
-		content = contents["data"]["content"]
+		content = contents["data"]["title"]
 
 		data.append(content)
 

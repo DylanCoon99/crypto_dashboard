@@ -1,5 +1,6 @@
 from google.cloud import storage
 import json
+import os
 
 storage_client = storage.Client()
 
@@ -9,14 +10,16 @@ bucket = storage_client.get_bucket(bucket_name)
 
 
 
-def upload_file_to_bucket(source_folder_name, destination_folder_name, destination_name):
+def upload_folder_to_bucket(source_folder_name, destination_folder_name):
 
 
+	for filename in os.listdir(source_folder_name):
 
-	blob = bucket.blob(destination_folder_name + destination_name)
-	blob.upload_from_filename(source_folder_name)
+		blob = bucket.blob(destination_folder_name + filename)
+		
+		blob.upload_from_filename(source_folder_name + filename)
 
-	print(f"File {source_folder_name} uploaded to {destination_folder_name}.")
+		print(f"File {source_folder_name + filename} uploaded to {destination_folder_name}.")
 	
 	return 
 
