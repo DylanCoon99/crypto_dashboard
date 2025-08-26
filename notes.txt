@@ -55,3 +55,12 @@ How will this be hosted? (GCP)
 		- NewsAPI
 		- X API: tweepy -> fetch tweets
 	- Storage: Stores data in Cloud Storage Buckets
+
+
+Docker Shit
+
+BUILD: docker build -t us-east1-docker.pkg.dev/crypto-dashboard-469901/data-ingestion/data-ingestion . --platform linux/amd64
+
+docker images (lists images)
+
+PUSH: docker push us-east1-docker.pkg.dev/crypto-dashboard-469901/data-ingestion/data-ingestion

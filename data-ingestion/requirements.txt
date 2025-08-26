@@ -3,7 +3,6 @@ anyio==4.10.0
 cachetools==5.5.2
 certifi==2025.8.3
 charset-normalizer==3.4.3
-click @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_2bwamfk1ra/croot/click_1754477943404/work
 dnspython==2.7.0
 email_validator==2.2.0
 fastapi==0.116.1
@@ -17,7 +16,6 @@ google-cloud-storage==3.3.0
 google-crc32c==1.7.1
 google-resumable-media==2.7.2
 googleapis-common-protos==1.70.0
-h11 @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_557zp2ij9k/croot/h11_1748442489221/work
 httpcore==1.0.9
 httplib2==0.22.0
 httptools==0.6.4
@@ -64,8 +62,8 @@ typing-inspection==0.4.1
 typing_extensions==4.14.1
 ujson==5.11.0
 urllib3==2.5.0
-uvicorn @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_0dm6hdefmx/croot/uvicorn-split_1751615743028/work
 uvloop==0.21.0
 watchfiles==1.1.0
 websockets==15.0.1
 wheel==0.45.1
+uvicorn

@@ -44,7 +44,6 @@ func main() {
 		// endpoint for retrieving AI Insights
 		api.GET("/insight", controllers.Insight)
 
-
 		// endpoint for retrieving sentiment
 		api.GET("/sentiment", controllers.Sentiment)
 
