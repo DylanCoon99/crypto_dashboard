@@ -1,4 +1,4 @@
-module github.com/DylanCoon99/crypto_dashboard
+module github.com/DylanCoon99/crypto_dashboard/crypto-service
 
 go 1.24.5
 

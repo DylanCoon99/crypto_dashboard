@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 	"time"
-	"net/http"	
+	//"net/http"	
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	//"github.com/joho/godotenv"
@@ -41,6 +41,12 @@ func main() {
 		//test endpoint
 		api.GET("/test", controllers.Test)
 
+		// endpoint for retrieving AI Insights
+		api.GET("/insight", controllers.Insight)
+
+
+		// endpoint for retrieving sentiment
+		api.GET("/sentiment", controllers.Sentiment)
 
 	}
 
