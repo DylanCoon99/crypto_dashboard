@@ -3,7 +3,6 @@ import json
 
 storage_client = storage.Client()
 
-
 bucket_name = "raw-digested-data"
 bucket = storage_client.get_bucket(bucket_name)
 
@@ -35,6 +34,11 @@ def read_folder_from_bucket(folder_name):
 	# return text block joining all data
 
 	return "\r".join(data)
+
+
+
+
+
 
 '''
 

@@ -5,7 +5,6 @@ from datetime import datetime, timezone
 
 app = FastAPI()
 
-
 @app.get("/sentiment/{coin_name}")
 async def root(coin_name: str):
 	try:
@@ -37,4 +36,6 @@ async def root(coin_name: str):
 		)
 
 
-
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}

@@ -1,5 +1,6 @@
 package main
 
+
 import (
 	"log"
 	"time"
@@ -7,12 +8,14 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	//"github.com/joho/godotenv"
-	"github.com/DylanCoon99/crypto_dashboard/crypto-service/controllers"
-	//"github.com/DylanCoon99/crypto_dashboard/crypto-service/crypto-api"
+	"github.com/DylanCoon99/crypto_dashboard/insight-service/controllers"
 )
 
 
+
+
 func main() {
+
 
 	/*
 	err := godotenv.Load(".env")
@@ -36,16 +39,12 @@ func main() {
 	}))
 
 
-	api := r.Group("/api")
+		api := r.Group("/api")
 	{
 		//test endpoint
 		api.GET("/test", controllers.Test)
 
-		// endpoint for retrieving AI Insights
-		api.GET("/insight/:coin_name", controllers.Insight)
-
-		// endpoint for retrieving sentiment
-		api.GET("/sentiment/:coin_name", controllers.Sentiment)
+		// add other endpoints
 
 	}
 
@@ -53,5 +52,7 @@ func main() {
 	log.Println("Server starting on port 8080...")
 
 	log.Fatal(r.Run(":8080"))
+
+
 
 }

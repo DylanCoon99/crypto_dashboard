@@ -2,7 +2,7 @@ from google.cloud import storage
 import json
 import os
 
-storage_client = storage.Client()
+storage_client = storage.Client(project="crypto-dashboard-469901")
 
 
 bucket_name = "raw-digested-data"

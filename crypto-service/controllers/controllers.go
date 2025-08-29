@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"github.com/gin-gonic/gin"
+	"github.com/DylanCoon99/crypto_dashboard/crypto-service/api"
 )
 
 
@@ -22,10 +23,14 @@ func Test(c *gin.Context) {
 
 func Insight(c *gin.Context) {
 
-	log.Println("Insight endpoint")
+	//log.Println("Insight endpoint is doing it's thing")
+
+	coin_name := c.Param("coin_name")
+
+	data := api.InsightServiceAPI(coin_name)
 
 	c.JSON(http.StatusOK, gin.H{
-      "message": "<Insert Insight Data Here>",
+      "data": data,
     })
 
     return

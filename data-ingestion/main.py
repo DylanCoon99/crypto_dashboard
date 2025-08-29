@@ -22,6 +22,8 @@ async def root(coin_name: str):
 		## clean local api directory
 		# ./api_data/
 		clean_local_directory(coin_name, source_folder_name)
+
+		return {"message": f"Successfully digested data on {datetime.now(timezone.utc)}"}
 	except Exception as e:
 		print(f"An error occured: {e}")
 		raise HTTPException(
@@ -29,4 +31,7 @@ async def root(coin_name: str):
 			detail=f"An unexpected internal server error occured on {datetime.now(timezone.utc)}."
 		)
 
-	return {"message": f"Successfully digested data on {datetime.now(timezone.utc)}"}
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
