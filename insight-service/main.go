@@ -1,20 +1,18 @@
 package main
 
-
 import (
+	"context"
 	"log"
 	"time"
-	"context"
-	//"net/http"	
+
+	//"net/http"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+
 	//"github.com/joho/godotenv"
 	"cloud.google.com/go/storage"
 	"github.com/DylanCoon99/crypto_dashboard/insight-service/controllers"
 )
-
-
-
 
 func main() {
 
@@ -27,10 +25,9 @@ func main() {
 	}
 
 	// create the api config here
-	apiCfg := controllers.ApiCfg {
+	apiCfg := controllers.ApiCfg{
 		Client: client,
 	}
-
 
 	// gin server setup
 	r := gin.Default()
@@ -44,22 +41,18 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
-
 	api := r.Group("/api")
 	{
 		//test endpoint
 		api.GET("/test", apiCfg.Test)
 
 		// add other endpoints
-		api.GET("/testbucket/:coin_name", controllers.TestBucket)
+		api.GET("/testbucket/:coin_name", apiCfg.TestBucket)
 
 	}
-
 
 	log.Println("Server starting on port 8080...")
 
 	log.Fatal(r.Run(":8080"))
-
-
 
 }
