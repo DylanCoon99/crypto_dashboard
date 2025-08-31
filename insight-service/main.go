@@ -4,10 +4,12 @@ package main
 import (
 	"log"
 	"time"
+	"context"
 	//"net/http"	
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	//"github.com/joho/godotenv"
+	"cloud.google.com/go/storage"
 	"github.com/DylanCoon99/crypto_dashboard/insight-service/controllers"
 )
 
@@ -16,15 +18,19 @@ import (
 
 func main() {
 
-
-	/*
-	err := godotenv.Load(".env")
+	// create the cloud client here
+	ctx := context.Background()
+	client, err := storage.NewClient(ctx)
 
 	if err != nil {
-		log.Fatalf("Error loading .env file")
+		log.Fatal("Failed to create cloud client")
 	}
 
-	*/
+	// create the api config here
+	apiCfg := controllers.ApiCfg {
+		Client: client,
+	}
+
 
 	// gin server setup
 	r := gin.Default()
@@ -39,12 +45,13 @@ func main() {
 	}))
 
 
-		api := r.Group("/api")
+	api := r.Group("/api")
 	{
 		//test endpoint
-		api.GET("/test", controllers.Test)
+		api.GET("/test", apiCfg.Test)
 
 		// add other endpoints
+		api.GET("/testbucket/:coin_name", controllers.TestBucket)
 
 	}
 
