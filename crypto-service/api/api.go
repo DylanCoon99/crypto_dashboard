@@ -5,16 +5,41 @@ import (
 	"os"
 	"net/http"
 	//"fmt"
+	"encoding/json"
 	"io/ioutil"
 	"log"
+	"time"
 	"github.com/joho/godotenv"
 )
 
 
 
+type InsightResponse struct {
+	CoinName string      `json:"coin_name"`
+	Time     time.Time   `json:"time"`
+	Insight  string      `json:"insight"`
+}
 
-func InsightServiceAPI(coin_name string) string {
 
+type Sentiment struct {
+	Neg            float32 `json:"neg"`
+	Neu            float32 `json:"neu"`
+	Pos            float32 `json:"pos"`
+	Compound       float32 `json:"compound"`
+	SentimentLabel string      `json:"sentiment_label"`
+	Time           time.Time   `json:"time"`
+}
+
+
+type SentimentResponse struct {
+	CoinName        string      `json:"coin_name"`
+	SentimentScore  Sentiment   `json:"sentiment_score"`
+}
+
+
+
+
+func InsightServiceAPI(coin_name string) *InsightResponse {
 
 	err := godotenv.Load(".env")
 
@@ -22,7 +47,7 @@ func InsightServiceAPI(coin_name string) string {
 		log.Fatalf("Error loading .env file")
 	}
 
-	resp, err := http.Get(os.Getenv("INSIGHT_SERVICE_API_ENDPOINT") + "/ingest/" + coin_name)
+	resp, err := http.Get(os.Getenv("AI_API_ENDPOINT") + "/insight/" + coin_name)
 	if err != nil {
 		log.Fatalf("Error making GET request: %v", err)
 	}
@@ -36,14 +61,53 @@ func InsightServiceAPI(coin_name string) string {
 
 	//fmt.Printf("Response: %s\n", body)
 
+	var res InsightResponse
+
+	err = json.Unmarshal(body, &res)
+
+	if err != nil {
+		log.Printf("Error unmarshaling: %v", err)
+		return nil
+	}
 
 
-	return string(body)
+	return &res
 
 }
 
 
-func SentimentServiceAPI(coin_name string) {
+func SentimentServiceAPI(coin_name string) *SentimentResponse {
 
-	return
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	resp, err := http.Get(os.Getenv("AI_API_ENDPOINT") + "/sentiment/" + coin_name)
+	if err != nil {
+		log.Fatalf("Error making GET request: %v", err)
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal("Error reading response body: %v", err)
+	}
+
+	//fmt.Printf("Response: %s\n", body)
+
+	var res SentimentResponse
+
+	err = json.Unmarshal(body, &res)
+
+	if err != nil {
+		log.Printf("Error unmarshaling: %v", err)
+		return nil
+	}
+
+
+	return &res
+
 }

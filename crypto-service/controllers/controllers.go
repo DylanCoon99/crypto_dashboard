@@ -39,10 +39,14 @@ func Insight(c *gin.Context) {
 
 func Sentiment(c *gin.Context) {
 
-	log.Println("Sentiment endpoint")
+	//log.Println("Insight endpoint is doing it's thing")
+
+	coin_name := c.Param("coin_name")
+
+	data := api.SentimentServiceAPI(coin_name)
 
 	c.JSON(http.StatusOK, gin.H{
-      "message": "<Insert Sentiment Data Here>",
+      "data": data,
     })
 
     return
