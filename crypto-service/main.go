@@ -47,6 +47,8 @@ func main() {
 		// endpoint for retrieving sentiment
 		api.GET("/sentiment/:coin_name", controllers.Sentiment)
 
+		
+
 	}
 
 

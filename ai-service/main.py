@@ -1,7 +1,7 @@
 import os
 from fastapi import FastAPI, HTTPException, status
 from utility.sentiment import AnalyzeSentiment
-from utility.insight import buildCSV
+from utility.insight import getInsight
 from utility.cloud_functions import read_folder_from_bucket
 from datetime import datetime, timezone 
 
@@ -44,20 +44,17 @@ async def root(coin_name: str):
 	try:
 		folder_name = f"{coin_name}_digested_data/"
 
-		if not os.path.exists(f"./data/insight-data/{coin_name}-data.csv"):
-			## if insight data does not already exist --> read data from bucket and generate new insights
-			data = read_folder_from_bucket(folder_name)
+		# data is a list of headlines
+		data = read_folder_from_bucket(folder_name)
 
-			buildCSV(coin_name, data)
-
-
+		insight = getInsight(data)
 
 		current_utc_time = datetime.now(timezone.utc)
 
 		return {
 			"coin_name": coin_name,
 			"time": current_utc_time,
-			"data": data,
+			"insight": insight,
 		}
 
 	except Exception as e:
@@ -66,6 +63,27 @@ async def root(coin_name: str):
 			status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
 			detail=f"An unexpected internal server error occured on {datetime.now(timezone.utc)}."
 		)
+
+
+'''
+@app.get("/data/{coin_name}")
+async def root(coin_name: str):
+	try:
+		folder_name = f"{coin_name}_digested_data/"
+
+		data = read_folder_from_bucket(folder_name)
+
+		return {
+			"data": data
+		}
+
+	except Exception as e:
+		print(f"An error occured: {e}")
+		raise HTTPException(
+			status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+			detail=f"An unexpected internal server error occured on {datetime.now(timezone.utc)}."
+		)
+'''
 
 
 

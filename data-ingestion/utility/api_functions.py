@@ -58,8 +58,7 @@ def clean_local_directory(coin_name: str, directory):
 
     return
 
-
-
+'''
 
 def main():
 
@@ -75,3 +74,4 @@ def main():
 if __name__ == "__main__":
     main()
 
+'''

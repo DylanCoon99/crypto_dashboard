@@ -1,38 +1,19 @@
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 
-
-
-def buildCSV(coin_name: str, data):
-
-	## iterates over ingested data 
-
-	for d in data:
-		print(d)
-
-	return
+# Load fine-tuned model
+model_path = "./model/fine-tuned-t5/"
+tokenizer = T5Tokenizer.from_pretrained(model_path)
+model = T5ForConditionalGeneration.from_pretrained(model_path)
 
 
 
 
-def main():
+def getInsight(headlines):
 
-	model_name = "t5-small"
+	# Generate insight
+	input_text = f"summarize: {' '.join(headlines)}"
+	inputs = tokenizer(input_text, return_tensors="pt", max_length=512, truncation=True)
+	outputs = model.generate(**inputs, max_length=100)
+	insight = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-	tokenizer = T5Tokenizer.from_pretrained(model_name)
-
-	model = T5ForConditionalGeneration.from_pretrained(model_name)
-
-	input_text = "summarize: Bitcoin surges to new high. Ethereum gains traction with new partnerships."
-
-	inputs = tokenizer(input_text, return_tensors="pt")
-
-	outputs = model.generate(**inputs)
-
-	print(tokenizer.decode(outputs[0], skip_special_tokens=True))
-
-	return
-
-
-
-if __name__ == "__main__":
-	main()
+	return insight
