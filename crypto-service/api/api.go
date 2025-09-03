@@ -13,6 +13,9 @@ import (
 )
 
 
+// MAP COIN NAMES TO COIN IDs
+var coinMap map[string]string
+
 
 type InsightResponse struct {
 	CoinName string      `json:"coin_name"`
@@ -36,6 +39,12 @@ type SentimentResponse struct {
 	SentimentScore  Sentiment   `json:"sentiment_score"`
 }
 
+
+type MarketChartResponse struct {
+	Prices       [][]float32      `json:"prices"`
+	MarketCaps   [][]float32   `json:"market_caps"`
+	TotalVolumes [][]float32 `json:"total_volumes"`
+}
 
 
 
@@ -111,3 +120,49 @@ func SentimentServiceAPI(coin_name string) *SentimentResponse {
 	return &res
 
 }
+
+// *MarketChartResponse
+
+func HistoricPriceAPI(coin_name string) *MarketChartResponse {
+
+	err := godotenv.Load(".env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	resp, err := http.Get(os.Getenv("COIN_GECKO_API_ENDPOINT") + "/coins/" + coin_name + "/market_chart?days=7&vs_currency=usd&interval=daily")
+	if err != nil {
+		log.Fatalf("Error making GET request: %v", err)
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal("Error reading response body: %v", err)
+	}
+
+	//fmt.Printf("Response: %s\n", body)
+
+	
+	var res MarketChartResponse
+
+	err = json.Unmarshal(body, &res)
+
+	if err != nil {
+		log.Printf("Error unmarshaling: %v", err)
+		return nil
+	}
+	
+
+
+	return &res
+
+
+}
+
+
+
+
+

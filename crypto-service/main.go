@@ -47,6 +47,11 @@ func main() {
 		// endpoint for retrieving sentiment
 		api.GET("/sentiment/:coin_name", controllers.Sentiment)
 
+		// endpoint for retrieving historical price data for past 24hrs
+		api.GET("/price/historic/:coin_name", controllers.HistoricalPrice)
+
+		// endpoint for retrieving real time price data for past 24hrs
+		api.GET("/price/realtime/:coin_name", controllers.RealTimePrice)
 		
 
 	}

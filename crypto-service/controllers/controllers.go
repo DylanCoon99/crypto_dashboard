@@ -39,7 +39,6 @@ func Insight(c *gin.Context) {
 
 func Sentiment(c *gin.Context) {
 
-	//log.Println("Insight endpoint is doing it's thing")
 
 	coin_name := c.Param("coin_name")
 
@@ -53,3 +52,26 @@ func Sentiment(c *gin.Context) {
 } 
 
 
+
+func HistoricalPrice(c *gin.Context) {
+
+
+	coin_name := c.Param("coin_name")
+
+	data := api.HistoricPriceAPI(coin_name)
+
+	c.JSON(http.StatusOK, gin.H{
+      "data": data,
+    })
+
+    return
+
+}
+
+
+
+func RealTimePrice(c *gin.Context) {
+
+	
+	return
+}
