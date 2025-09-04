@@ -72,6 +72,13 @@ func HistoricalPrice(c *gin.Context) {
 
 func RealTimePrice(c *gin.Context) {
 
+	coin_name := c.Param("coin_name")
+
+	data := api.RealTimePriceAPI(coin_name)
+
+	c.JSON(http.StatusOK, gin.H{
+      "data": data,
+    })
 	
 	return
 }

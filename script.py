@@ -11,13 +11,12 @@ with open("./headlines.txt", "w") as file:
 
 import requests
 
-url = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?days=7&vs_currency=usd&interval=daily"
+url = "https://api.coingecko.com/api/v3/simple/price?vs_currencies=usd&ids=bitcoin"
 
 resp = requests.get(url)
 
 print(resp.json())
 
 
-print("Length of prices", len(resp.json()["prices"]))
 
 

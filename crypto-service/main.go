@@ -3,23 +3,24 @@ package main
 import (
 	"log"
 	"time"
-	//"net/http"	
+
+	//"net/http"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+
 	//"github.com/joho/godotenv"
 	"github.com/DylanCoon99/crypto_dashboard/crypto-service/controllers"
 	//"github.com/DylanCoon99/crypto_dashboard/crypto-service/crypto-api"
 )
 
-
 func main() {
 
 	/*
-	err := godotenv.Load(".env")
+		err := godotenv.Load(".env")
 
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
+		if err != nil {
+			log.Fatalf("Error loading .env file")
+		}
 
 	*/
 
@@ -34,7 +35,6 @@ func main() {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
-
 
 	api := r.Group("/api")
 	{
@@ -52,10 +52,8 @@ func main() {
 
 		// endpoint for retrieving real time price data for past 24hrs
 		api.GET("/price/realtime/:coin_name", controllers.RealTimePrice)
-		
 
 	}
-
 
 	log.Println("Server starting on port 8080...")
 
