@@ -1,25 +1,28 @@
 package controllers
 
-
 import (
 	"log"
 	"net/http"
-	"github.com/gin-gonic/gin"
+
 	"github.com/DylanCoon99/crypto_dashboard/crypto-service/api"
+	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 )
 
+type ApiConfig struct {
+	Upgrader *websocket.Upgrader
+}
 
 func Test(c *gin.Context) {
 
 	log.Println("Test endpoint")
 
 	c.JSON(http.StatusOK, gin.H{
-      "message": "pong",
-    })
-    return
+		"message": "pong",
+	})
+	return
 
-} 
-
+}
 
 func Insight(c *gin.Context) {
 
@@ -30,45 +33,38 @@ func Insight(c *gin.Context) {
 	data := api.InsightServiceAPI(coin_name)
 
 	c.JSON(http.StatusOK, gin.H{
-      "data": data,
-    })
+		"data": data,
+	})
 
-    return
-} 
-
+	return
+}
 
 func Sentiment(c *gin.Context) {
-
 
 	coin_name := c.Param("coin_name")
 
 	data := api.SentimentServiceAPI(coin_name)
 
 	c.JSON(http.StatusOK, gin.H{
-      "data": data,
-    })
+		"data": data,
+	})
 
-    return
-} 
-
-
+	return
+}
 
 func HistoricalPrice(c *gin.Context) {
-
 
 	coin_name := c.Param("coin_name")
 
 	data := api.HistoricPriceAPI(coin_name)
 
 	c.JSON(http.StatusOK, gin.H{
-      "data": data,
-    })
+		"data": data,
+	})
 
-    return
+	return
 
 }
-
-
 
 func RealTimePrice(c *gin.Context) {
 
@@ -77,8 +73,14 @@ func RealTimePrice(c *gin.Context) {
 	data := api.RealTimePriceAPI(coin_name)
 
 	c.JSON(http.StatusOK, gin.H{
-      "data": data,
-    })
-	
+		"data": data,
+	})
+
 	return
+}
+
+func (cfg *ApiConfig) HandleWebSocket(c *gin.Context) {
+
+	return
+
 }
