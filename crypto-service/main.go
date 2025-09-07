@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"net/http"
-
+	"context"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -72,6 +72,12 @@ func main() {
 		api.GET("/ws", apiCfg.HandleWebSocket)
 
 	}
+
+	ctx, _ := context.WithCancel(context.Background())
+	// start a goroutine to get real time prices via api
+	go controllers.GetRealTimePrices(ctx)
+	go controllers.Broadcast(ctx)
+
 
 	log.Println("Server starting on port 8080...")
 
