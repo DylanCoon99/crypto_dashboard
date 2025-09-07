@@ -78,4 +78,3 @@ func RealTimePrice(c *gin.Context) {
 
 	return
 }
-

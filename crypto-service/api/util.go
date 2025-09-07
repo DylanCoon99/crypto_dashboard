@@ -72,3 +72,5 @@ type RealTimePrice struct {
 	PriceUSD float64   `json:"price_usd"`
 	Date     time.Time `json:"date"`
 }
+
+var CoinNames = []string{"bitcoin", "ethereum", "solana"}

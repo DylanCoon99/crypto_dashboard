@@ -1,27 +1,16 @@
 package controllers
 
 import (
-	"log"
-	"sync"
-	"time"
 	"context"
+	"log"
+	"time"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+	"github.com/DylanCoon99/crypto_dashboard/crypto-service/api"
+
 )
-
-// Represents a connected ws client
-type Client struct {
-	ClientID uuid.UUID
-	Conn     *websocket.Conn
-	Send     chan []byte
-}
-
-type Manager struct {
-	Clients map[uuid.UUID]*Client
-	Send    chan []byte
-	mu      sync.Mutex
-}
 
 var manager = &Manager{
 	Clients: make(map[uuid.UUID]*Client),
@@ -68,22 +57,18 @@ func (cfg *ApiConfig) HandleWebSocket(c *gin.Context) {
 	// write messages to client goroutine
 	go client.writeMessages(ctx, done)
 
-
 	<-done
 
 }
 
-
 // takes in a send only done channel as paramater to signal parent goroutine
-func (c *Client) writeMessages(ctx context.Context, done chan<-bool) {
-
+func (c *Client) writeMessages(ctx context.Context, done chan<- bool) {
 
 	defer func() {
 		c.Conn.Close()
 		log.Println("CANCELLING CONTEXT HERE")
 		done <- true
 	}()
-
 
 	for {
 		select {
@@ -103,17 +88,15 @@ func (c *Client) writeMessages(ctx context.Context, done chan<-bool) {
 				return
 			}
 			log.Printf("Message sent to client %s: %s", c.ClientID.String(), string(message))
-			
+
 		}
 	}
 
 }
 
-
-
 func Broadcast(ctx context.Context) {
 
-	for message	:= range manager.Send {
+	for message := range manager.Send {
 		for _, client := range manager.Clients {
 
 			// send message to client's send channel
@@ -122,21 +105,32 @@ func Broadcast(ctx context.Context) {
 		}
 	}
 
-
 }
-
 
 func GetRealTimePrices(ctx context.Context) {
 
 	// gets realtime time price data every 5 mins and writes to the managers Send channel
 
 	for {
-		manager.mu.Lock()
-		time.Sleep(2 * time.Second)
+		time.Sleep(10 * time.Second)
 
-		log.Println("Simulating api call...")
-		manager.Send <- []byte("test")
-		manager.mu.Unlock()
+		for _, coin_name := range api.CoinNames {
+			manager.mu.Lock()
+			// api call for real-time price data
+			log.Printf("Api call for realtime price of %v", coin_name)
+			data, err := json.Marshal(api.RealTimePriceAPI(coin_name))
+
+			if err != nil {
+				log.Printf("Error getting realtime price for %v", coin_name)
+				data = []byte("")
+			}
+
+
+			manager.Send <- data
+			manager.mu.Unlock()
+
+		}
+
 	}
 
 }
