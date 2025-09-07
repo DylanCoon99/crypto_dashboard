@@ -14,6 +14,7 @@ import (
 type Client struct {
 	ClientID uuid.UUID
 	Conn     *websocket.Conn
+	Send     chan []byte
 }
 
 type Manager struct {
@@ -40,7 +41,7 @@ func (cfg *ApiConfig) HandleWebSocket(c *gin.Context) {
 
 	// Generate unique UUID for the client
 	clientUUID := uuid.New()
-	client := &Client{ClientID: clientUUID, Conn: ws}
+	client := &Client{ClientID: clientUUID, Conn: ws, Send: make(chan []byte, 256)}
 
 	// Client is added to manager
 	manager.mu.Lock()
@@ -58,38 +59,56 @@ func (cfg *ApiConfig) HandleWebSocket(c *gin.Context) {
 		log.Printf("Client %s has successfully disconnected. Total clients: %d", clientUUID, len(manager.Clients))
 	}()
 
-	// if we want to listen to Client messages, we would do so here
-
-
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	// 
-	go client.writeMessages(ctx)
+	// create a done channel to signal this function
+	done := make(chan bool)
+
+	// write messages to client goroutine
+	go client.writeMessages(ctx, done)
 
 
-	<-ctx.Done()
+	<-done
 
 }
 
 
+// takes in a send only done channel as paramater to signal parent goroutine
+func (c *Client) writeMessages(ctx context.Context, done chan<-bool) {
 
-func (c *Client) writeMessages(ctx context.Context) {
 
 	defer func() {
 		c.Conn.Close()
+		log.Println("CANCELLING CONTEXT HERE")
+		done <- true
 	}()
+
 
 	for {
 		select {
 		case <-ctx.Done():
 			return
-		default:
-			continue
+		case message, ok := <-c.Send:
+
+			if !ok {
+				log.Printf("Send channel close for client %s", c.ClientID.String())
+				return
+			}
+
+			err := c.Conn.WriteMessage(websocket.TextMessage, message)
+
+			if err != nil {
+				log.Printf("Websocket write error: %v", err)
+				return
+			}
+			log.Printf("Message sent to client %s: %s", c.ClientID.String(), string(message))
+			
 		}
 	}
 
 }
+
 
 
 func Broadcast(ctx context.Context) {
@@ -97,13 +116,8 @@ func Broadcast(ctx context.Context) {
 	for message	:= range manager.Send {
 		for _, client := range manager.Clients {
 
-			err := client.Conn.WriteMessage(websocket.TextMessage, message)
-
-			if err != nil {
-				log.Printf("Websocket write error: %v", err)
-				return
-			}
-			log.Printf("Message sent to client %s: %s", client.ClientID.String(), string(message))
+			// send message to client's send channel
+			client.Send <- message
 
 		}
 	}

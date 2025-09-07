@@ -73,7 +73,9 @@ func main() {
 
 	}
 
-	ctx, _ := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	// start a goroutine to get real time prices via api
 	go controllers.GetRealTimePrices(ctx)
 	go controllers.Broadcast(ctx)
