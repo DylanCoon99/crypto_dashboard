@@ -5,9 +5,11 @@ import (
 	"time"
 
 	"net/http"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+
 	//"github.com/joho/godotenv"
 	"github.com/DylanCoon99/crypto_dashboard/crypto-service/controllers"
 	//"github.com/DylanCoon99/crypto_dashboard/crypto-service/crypto-api"
@@ -27,21 +29,15 @@ func main() {
 	// Api configuration setup
 	var apiCfg controllers.ApiConfig
 
-
 	var upgrader = websocket.Upgrader{
-		ReadBufferSize: 1024,
+		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 		CheckOrigin: func(r *http.Request) bool {
 			return true
 		},
 	}
 
-
-
 	apiCfg.Upgrader = &upgrader
-
-
-
 
 	// gin server setup
 	r := gin.Default()

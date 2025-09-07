@@ -79,8 +79,3 @@ func RealTimePrice(c *gin.Context) {
 	return
 }
 
-func (cfg *ApiConfig) HandleWebSocket(c *gin.Context) {
-
-	return
-
-}
