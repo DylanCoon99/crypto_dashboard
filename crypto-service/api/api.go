@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/joho/godotenv"
+	//"github.com/joho/godotenv"
 )
 
 /*
@@ -19,12 +19,13 @@ func UnixTimeToDate(unixTime int32) time.Time {
 */
 
 func InsightServiceAPI(coin_name string) *InsightResponse {
-
+	/*
 	err := godotenv.Load(".env")
 
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
+	*/
 
 	resp, err := http.Get(os.Getenv("AI_API_ENDPOINT") + "/insight/" + coin_name)
 	if err != nil {
@@ -54,12 +55,13 @@ func InsightServiceAPI(coin_name string) *InsightResponse {
 }
 
 func SentimentServiceAPI(coin_name string) *SentimentResponse {
-
+	/*
 	err := godotenv.Load(".env")
 
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
+	*/
 
 	resp, err := http.Get(os.Getenv("AI_API_ENDPOINT") + "/sentiment/" + coin_name)
 	if err != nil {
@@ -90,11 +92,13 @@ func SentimentServiceAPI(coin_name string) *SentimentResponse {
 
 func HistoricPriceAPI(coin_name string) *MarketChartFormatted {
 
+	/*
 	err := godotenv.Load(".env")
 
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
+	*/
 
 	resp, err := http.Get(os.Getenv("COIN_GECKO_API_ENDPOINT") + "/coins/" + coin_name + "/market_chart?days=7&vs_currency=usd&interval=daily")
 	if err != nil {
@@ -149,11 +153,13 @@ func HistoricPriceAPI(coin_name string) *MarketChartFormatted {
 func RealTimePriceAPI(coin_name string) *RealTimePrice {
 	// /simple/price?vs_currencies=usd&ids=bitcoin
 
+	/*
 	err := godotenv.Load(".env")
 
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
+	*/
 
 	resp, err := http.Get(os.Getenv("COIN_GECKO_API_ENDPOINT") + "/simple/price?vs_currencies=usd&ids=" + coin_name)
 	if err != nil {

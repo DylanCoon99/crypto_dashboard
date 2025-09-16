@@ -3,7 +3,11 @@ import json
 from datetime import date
 import os
 
-storage_client = storage.Client()
+key_file_path = "crypto-dashboard-469901-35a2ebee0bbb.json"
+
+project="crypto-dashboard-469901"
+
+storage_client = storage.Client.from_service_account_json(key_file_path)
 
 bucket_name = "raw-digested-data"
 bucket = storage_client.get_bucket(bucket_name)
@@ -14,7 +18,7 @@ def read_folder_from_bucket(folder_name):
 
 	today = date.today()
 
-	print(f"FILE EXIST: {os.path.exists(f"./data/{folder_name}{today}")}")
+	#print(f"FILE EXIST: {os.path.exists(f"./data/{folder_name}{today}")}")
 
 	if not os.path.exists(f"./data/{folder_name}{today}"):
 		blobs = bucket.list_blobs(prefix=folder_name)
