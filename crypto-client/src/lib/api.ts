@@ -1,8 +1,4 @@
-export async function fetchCoins() {
-  const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=50')
-  if (!res.ok) throw new Error('Failed to fetch coins')
-  return res.json()
-}
+
 
 export async function fetchPriceHistory(coinId: string) {
   const res = await fetch(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=1`)
