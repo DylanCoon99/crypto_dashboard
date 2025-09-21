@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import coins from '../public/data/coins.js'
 import { useQuery } from '@tanstack/react-query'

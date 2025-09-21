@@ -1,8 +1,13 @@
+'use client'
 import { useQuery } from '@tanstack/react-query'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { fetchPriceHistory } from '@/lib/api'
 
+
+
 export default function PriceGraph({ coinId }: { coinId: string }) {
+
+
   const { data, isLoading } = useQuery({
     queryKey: ['price-history', coinId],
     queryFn: () => fetchPriceHistory(coinId),

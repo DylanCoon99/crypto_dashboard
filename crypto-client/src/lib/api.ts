@@ -1,10 +1,18 @@
 
 
 export async function fetchPriceHistory(coinId: string) {
-  const res = await fetch(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=1`)
-  if (!res.ok) throw new Error('Failed to fetch price history')
-  const data = await res.json()
-  return data.prices.map(([timestamp, price]: [number, number]) => ({ timestamp: new Date(timestamp).toLocaleTimeString(), price }))
+  
+  const endpoint = process.env.NEXT_PUBLIC_COIN_ENDPOINT
+
+  const res = await fetch(`${endpoint}/coins/${coinId}/market_chart?vs_currency=usd&days=1`, {
+    next: { revalidate: 300 },
+  });
+  if (!res.ok) throw new Error('Failed to fetch price history');
+  const data = await res.json();
+  return data.prices.map(([timestamp, price]: [number, number]) => ({
+    timestamp: new Date(timestamp).toLocaleTimeString(),
+    price,
+  }));
 }
 
 export async function fetchAIInsights(coinId: string) {
